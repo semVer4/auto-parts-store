@@ -1,53 +1,76 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 export default function Contacts() {
-  const [sent, setSent] = useState(false)
-
   return (
-    <div className="container">
+    <div className="container workflow-page">
       <nav className="breadcrumbs" aria-label="Хлебные крошки">
         <ul className="breadcrumbs__list">
-          <li><Link to="/">Главная</Link></li>
-          <li><span aria-current="page">Контакты</span></li>
+          <li>
+            <Link to="/">Главная</Link>
+          </li>
+          <li>
+            <span aria-current="page">Помощь с демо</span>
+          </li>
         </ul>
       </nav>
-
       <div className="page-head">
-        <h1 className="page-head__title">Контакты</h1>
+        <span className="workflow-eyebrow">АвтоДеталь / Portfolio</span>
+        <h1 className="page-head__title">Помощь с демо</h1>
+        <p className="workflow-muted">
+          Это демонстрационный проект, а не действующий магазин автозапчастей.
+        </p>
       </div>
-
-      <div className="contacts">
-        <div className="contacts__info">
-          <p><strong>Телефон:</strong><br /><a href="tel:+78001234567">8 800 123-45-67</a> (бесплатно по России)</p>
-          <p><strong>E-mail:</strong><br /><a href="mailto:info@avtodetal.ru">info@avtodetal.ru</a></p>
-          <p><strong>Адрес:</strong><br />г. Москва, ул. Автозаводская, 12</p>
-          <p><strong>Режим работы:</strong><br />Ежедневно с 9:00 до 21:00</p>
-
-          {sent ? (
-            <div className="notice">Сообщение отправлено! Мы ответим вам в ближайшее время.</div>
-          ) : (
-            <form className="form-grid" onSubmit={(e) => { e.preventDefault(); setSent(true) }}>
-              <div className="field">
-                <label className="field__label" htmlFor="c-name">Имя <span>*</span></label>
-                <input className="field__input" id="c-name" name="name" required />
-              </div>
-              <div className="field">
-                <label className="field__label" htmlFor="c-phone">Телефон <span>*</span></label>
-                <input className="field__input" id="c-phone" name="phone" type="tel" required />
-              </div>
-              <div className="field field--full">
-                <label className="field__label" htmlFor="c-msg">Сообщение</label>
-                <textarea className="field__textarea" id="c-msg" name="message"></textarea>
-              </div>
-              <div className="field--full">
-                <button className="btn btn--primary" type="submit">Отправить</button>
-              </div>
-            </form>
-          )}
-        </div>
-
-        <div className="contacts__map" role="img" aria-label="Карта расположения магазина"></div>
+      <div className="demo-note">
+        <strong>Используйте только синтетические данные.</strong> Не указывайте настоящий телефон,
+        e-mail или адрес. На странице оформления есть кнопка «Заполнить тестовыми данными». Оплата,
+        отправка писем и реальная доставка не выполняются.
+      </div>
+      <div className="project-grid">
+        <section className="checkout-block">
+          <h2 className="checkout-block__title">Проверить сценарий</h2>
+          <p className="workflow-muted">
+            Добавьте товар в корзину, создайте тестовый заказ и измените его статус в демо-панели.
+          </p>
+          <div className="workflow-actions">
+            <Link className="btn btn--primary btn--small" to="/catalog">
+              Открыть каталог
+            </Link>
+            <Link className="btn btn--secondary btn--small" to="/orders">
+              Заказы
+            </Link>
+          </div>
+        </section>
+        <section className="checkout-block">
+          <h2 className="checkout-block__title">Архитектура и ограничения</h2>
+          <p className="workflow-muted">
+            Описание реализации, инструкция по проверке и границы демонстрационного проекта.
+          </p>
+          <Link className="workflow-text-link" to="/project">
+            Как устроен проект →
+          </Link>
+        </section>
+        <section className="checkout-block">
+          <h2 className="checkout-block__title">Исходный код</h2>
+          <p className="workflow-muted">
+            Код приложения, инструкции по локальному запуску и автоматизированные проверки доступны
+            в публичном репозитории.
+          </p>
+          <a
+            className="workflow-text-link"
+            href="https://github.com/semVer4/auto-parts-store"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Открыть GitHub ↗
+          </a>
+        </section>
+        <section className="checkout-block">
+          <h2 className="checkout-block__title">Заказы и доступ</h2>
+          <p className="workflow-muted">
+            Отображаются заказы вашей браузерной демо-сессии. В другом браузере или после удаления
+            cookie список будет другим. Полноценная авторизация и роли не реализованы.
+          </p>
+        </section>
       </div>
     </div>
   )

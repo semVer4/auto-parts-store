@@ -10,3 +10,10 @@ yarn-error.log*
 !.vscode/extensions.json
 
 *.tsbuildinfo
+.netlify/
+.env
+.env.*
+!.env.example
+playwright-report/
+test-results/
+coverage/

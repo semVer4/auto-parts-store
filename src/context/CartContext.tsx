@@ -1,12 +1,6 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useReducer,
-  type ReactNode,
-} from 'react'
-import type { Product } from '../data/products'
+import { createContext, useContext, useEffect, useMemo, useReducer, type ReactNode } from 'react'
+import { getProduct, type Product } from '../data/products'
+import { restoreCart, safeQuantity } from '../shared/cart'
 
 export interface CartLine {
   product: Product
@@ -28,12 +22,13 @@ const STORAGE_KEY = 'avtodetal-cart'
 function reducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
     case 'add': {
-      const qty = action.qty ?? 1
+      if (!action.product.inStock) return state
+      const qty = safeQuantity(action.qty ?? 1)
       const existing = state.lines.find((l) => l.product.id === action.product.id)
       if (existing) {
         return {
           lines: state.lines.map((l) =>
-            l.product.id === action.product.id ? { ...l, qty: l.qty + qty } : l,
+            l.product.id === action.product.id ? { ...l, qty: safeQuantity(l.qty + qty) } : l,
           ),
         }
       }
@@ -44,7 +39,7 @@ function reducer(state: CartState, action: CartAction): CartState {
     case 'setQty':
       return {
         lines: state.lines.map((l) =>
-          l.product.id === action.id ? { ...l, qty: Math.max(1, action.qty) } : l,
+          l.product.id === action.id ? { ...l, qty: safeQuantity(action.qty) } : l,
         ),
       }
     case 'clear':
@@ -57,7 +52,13 @@ function reducer(state: CartState, action: CartAction): CartState {
 function init(): CartState {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (raw) return JSON.parse(raw) as CartState
+    if (raw)
+      return {
+        lines: restoreCart(JSON.parse(raw)).map(({ productId, quantity }) => ({
+          product: getProduct(productId)!,
+          qty: quantity,
+        })),
+      }
   } catch {
     /* пустая корзина при ошибке чтения */
   }
@@ -80,7 +81,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, undefined, init)
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+    } catch {
+      // A full/disabled browser store must not break the in-memory checkout.
+    }
   }, [state])
 
   const value = useMemo<CartContextValue>(() => {

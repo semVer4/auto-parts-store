@@ -30,7 +30,7 @@ export default function ProductCard({ product }: { product: Product }) {
         </h3>
         <p className="card__art">Артикул: {product.article}</p>
         <p className={`card__stock ${product.inStock ? 'card__stock--in' : 'card__stock--order'}`}>
-          {product.inStock ? 'В наличии' : 'Под заказ'}
+          {product.inStock ? 'В наличии' : 'Нет в наличии'}
         </p>
         <div className="card__footer">
           <p className="card__price">
@@ -43,9 +43,9 @@ export default function ProductCard({ product }: { product: Product }) {
             className="btn btn--primary btn--small"
             type="button"
             onClick={handleAdd}
-            disabled={added}
+            disabled={added || !product.inStock}
           >
-            {added ? 'Добавлено ✓' : 'В корзину'}
+            {!product.inStock ? 'Недоступно' : added ? 'Добавлено ✓' : 'В корзину'}
           </button>
         </div>
       </div>

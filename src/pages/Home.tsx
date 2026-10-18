@@ -3,10 +3,22 @@ import ProductCard from '../components/ProductCard'
 import { categories, products } from '../data/products'
 
 const advantages = [
-  { title: 'Гарантия качества', text: 'Работаем напрямую с производителями. На все товары действует гарантия до 24 месяцев.' },
-  { title: 'Быстрая доставка', text: 'Доставим заказ по России за 1–3 дня. Самовывоз из 50 пунктов в вашем городе.' },
-  { title: 'Точный подбор', text: 'Подберём деталь по VIN-коду или госномеру — без ошибок и переплат.' },
-  { title: 'Удобная оплата', text: 'Картой онлайн, наличными при получении или безналичный расчёт для юрлиц.' },
+  {
+    title: 'Каталог и фильтры',
+    text: 'Поиск по названию, бренду и артикулу; фильтрация по категории и наличию.',
+  },
+  {
+    title: 'Серверный расчёт',
+    text: 'API проверяет товары и считает итог вместе с выбранным способом доставки.',
+  },
+  {
+    title: 'Сохранение заказов',
+    text: 'Заказы сохраняются на сервере и доступны после перезагрузки в этой демо-сессии.',
+  },
+  {
+    title: 'История статусов',
+    text: 'Подтверждение, отправка и отмена с проверкой допустимых переходов и версии заказа.',
+  },
 ]
 
 export default function Home() {
@@ -17,20 +29,33 @@ export default function Home() {
       <section className="hero">
         <div className="container hero__inner">
           <div className="hero__content">
-            <h1 className="hero__title">Запчасти для вашего авто за&nbsp;один&nbsp;клик</h1>
+            <h1 className="hero__title">От выбора детали до&nbsp;сохранённого&nbsp;заказа</h1>
             <p className="hero__text">
-              Более 2 000 000 наименований оригинальных деталей и качественных аналогов.
-              Подбор по VIN, доставка по всей России за 1–3 дня.
+              Демо-магазин с настоящим API, серверной проверкой заказа и историей статусов. Пройдите
+              весь сценарий с тестовыми данными — без оплаты и реальных поставок.
             </p>
             <div className="hero__actions">
-              <Link className="btn btn--primary" to="/catalog">Перейти в каталог</Link>
-              <Link className="btn btn--ghost" to="/catalog">Подбор по VIN</Link>
+              <Link className="btn btn--primary" to="/catalog">
+                Перейти в каталог
+              </Link>
+              <Link className="btn btn--ghost" to="/project">
+                Как устроен проект
+              </Link>
             </div>
           </div>
           <ul className="hero__features">
-            <li className="hero__feature"><strong>2 млн+</strong><span>товаров в наличии</span></li>
-            <li className="hero__feature"><strong>1–3 дня</strong><span>срок доставки</span></li>
-            <li className="hero__feature"><strong>24 мес.</strong><span>гарантия качества</span></li>
+            <li className="hero__feature">
+              <strong>{products.length}</strong>
+              <span>демо-товаров</span>
+            </li>
+            <li className="hero__feature">
+              <strong>API</strong>
+              <span>сохранение на сервере</span>
+            </li>
+            <li className="hero__feature">
+              <strong>4 статуса</strong>
+              <span>контроль жизненного цикла</span>
+            </li>
           </ul>
         </div>
       </section>
@@ -41,8 +66,13 @@ export default function Home() {
           <ul className="categories">
             {categories.map((c) => (
               <li className="category" key={c.name}>
-                <Link className="category__link" to={`/catalog?category=${encodeURIComponent(c.name)}`}>
-                  <span className="category__icon" aria-hidden="true">{c.icon}</span>
+                <Link
+                  className="category__link"
+                  to={`/catalog?category=${encodeURIComponent(c.name)}`}
+                >
+                  <span className="category__icon" aria-hidden="true">
+                    {c.icon}
+                  </span>
                   <span className="category__name">{c.name}</span>
                 </Link>
               </li>
@@ -53,7 +83,7 @@ export default function Home() {
 
       <section className="section">
         <div className="container">
-          <h2 className="section__title">Хиты продаж</h2>
+          <h2 className="section__title">Товары для демонстрации</h2>
           <ul className="products">
             {hits.map((p) => (
               <li className="product" key={p.id}>
@@ -66,7 +96,7 @@ export default function Home() {
 
       <section className="section section--muted">
         <div className="container">
-          <h2 className="section__title">Почему выбирают нас</h2>
+          <h2 className="section__title">Что можно проверить</h2>
           <ul className="advantages">
             {advantages.map((a) => (
               <li className="advantage" key={a.title}>
@@ -81,14 +111,12 @@ export default function Home() {
       <section className="section subscribe">
         <div className="container subscribe__inner">
           <div className="subscribe__text">
-            <h2 className="section__title">Подпишитесь на скидки</h2>
-            <p>Получайте подборки акций и спецпредложений на запчасти раз в неделю.</p>
+            <h2 className="section__title">Посмотрите на проект изнутри</h2>
+            <p>Архитектура, ограничения, тесты и сценарий демонстрации — без скрытых заглушек.</p>
           </div>
-          <form className="subscribe__form" onSubmit={(e) => { e.preventDefault(); e.currentTarget.reset() }}>
-            <label className="visually-hidden" htmlFor="email">Ваш e-mail</label>
-            <input className="subscribe__input" id="email" type="email" name="email" placeholder="Ваш e-mail" required />
-            <button className="btn btn--primary" type="submit">Подписаться</button>
-          </form>
+          <Link className="btn btn--primary" to="/project">
+            Открыть описание проекта
+          </Link>
         </div>
       </section>
     </>

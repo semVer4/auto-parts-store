@@ -11,10 +11,10 @@
   --color-success: #1f9d55;
   --color-warning: #d97706;
   --radius: 10px;
-  --shadow: 0 2px 12px rgba(26, 35, 50, .08);
+  --shadow: 0 2px 12px rgba(26, 35, 50, 0.08);
   --container: 1200px;
   --gap: 24px;
-  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 *,
@@ -54,8 +54,10 @@ ul {
   padding: 0;
 }
 
-h1, h2, h3 {
-  margin: 0 0 .5em;
+h1,
+h2,
+h3 {
+  margin: 0 0 0.5em;
   line-height: 1.2;
 }
 
@@ -98,11 +100,14 @@ button {
   font-size: 15px;
   font-weight: 600;
   text-align: center;
-  transition: background-color .2s, color .2s, border-color .2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    border-color 0.2s;
 }
 
 .btn:disabled {
-  opacity: .7;
+  opacity: 0.7;
   cursor: default;
 }
 
@@ -119,12 +124,12 @@ button {
 .btn--ghost {
   background-color: transparent;
   color: #fff;
-  border-color: rgba(255, 255, 255, .6);
+  border-color: rgba(255, 255, 255, 0.6);
 }
 
 .btn--ghost:hover,
 .btn--ghost:focus-visible {
-  background-color: rgba(255, 255, 255, .15);
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
 .btn--small {
@@ -201,7 +206,7 @@ button {
   color: #fff;
   font-weight: 600;
   border-radius: 0 var(--radius) var(--radius) 0;
-  transition: background-color .2s;
+  transition: background-color 0.2s;
 }
 
 .search__btn:hover {
@@ -272,7 +277,9 @@ button {
   height: 2px;
   background-color: var(--color-dark);
   border-radius: 2px;
-  transition: transform .25s, opacity .25s;
+  transition:
+    transform 0.25s,
+    opacity 0.25s;
 }
 
 .burger span + span {
@@ -298,13 +305,15 @@ button {
   font-weight: 500;
   background: none;
   border: none;
-  transition: background-color .2s, color .2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
 }
 
 .nav__link:hover,
 .nav__link:focus-visible,
 .nav__link.is-active {
-  background-color: rgba(255, 255, 255, .08);
+  background-color: rgba(255, 255, 255, 0.08);
   color: #fff;
 }
 
@@ -344,7 +353,7 @@ button {
 }
 
 .hero__feature {
-  background-color: rgba(255, 255, 255, .07);
+  background-color: rgba(255, 255, 255, 0.07);
   border-radius: var(--radius);
   padding: 18px;
   text-align: center;
@@ -395,7 +404,10 @@ button {
   border-radius: var(--radius);
   text-align: center;
   font-weight: 600;
-  transition: border-color .2s, box-shadow .2s, transform .2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    transform 0.2s;
 }
 
 .category__link:hover,
@@ -425,7 +437,9 @@ button {
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   overflow: hidden;
-  transition: box-shadow .2s, transform .2s;
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
 }
 
 .card:hover {
@@ -472,7 +486,7 @@ button {
   font-size: 13px;
   color: var(--color-muted);
   text-transform: uppercase;
-  letter-spacing: .03em;
+  letter-spacing: 0.03em;
 }
 
 .card__title {
@@ -573,7 +587,7 @@ button {
 
 .subscribe__text p {
   margin: 0;
-  color: rgba(255, 255, 255, .9);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .subscribe__form {
@@ -641,7 +655,7 @@ button {
 }
 
 .footer__bottom {
-  border-top: 1px solid rgba(255, 255, 255, .1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding: 18px 0;
   font-size: 14px;
 }
@@ -731,7 +745,7 @@ button {
   .nav__link {
     width: 100%;
     text-align: left;
-    border-bottom: 1px solid rgba(255, 255, 255, .08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .header__actions {
@@ -765,7 +779,7 @@ button {
 }
 
 .breadcrumbs__list li:not(:last-child)::after {
-  content: "/";
+  content: '/';
   margin-left: 8px;
   color: var(--color-border);
 }
@@ -774,7 +788,7 @@ button {
   color: var(--color-primary);
 }
 
-.breadcrumbs [aria-current="page"] {
+.breadcrumbs [aria-current='page'] {
   color: var(--color-text);
 }
 
@@ -959,7 +973,7 @@ button {
 .product-info__brand {
   color: var(--color-muted);
   text-transform: uppercase;
-  letter-spacing: .03em;
+  letter-spacing: 0.03em;
   font-size: 14px;
   margin: 0 0 6px;
 }
@@ -1209,7 +1223,7 @@ button {
   font-size: 15px;
   font-family: inherit;
   outline: none;
-  transition: border-color .2s;
+  transition: border-color 0.2s;
 }
 
 .field__input:focus,

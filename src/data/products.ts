@@ -1,3 +1,5 @@
+import { orderCatalogue } from '../shared/catalog'
+
 export interface Product {
   id: number
   title: string
@@ -15,7 +17,7 @@ export interface Product {
 // Базовый путь к ассетам (учитывает vite base './')
 const img = (name: string) => `${import.meta.env.BASE_URL}img/${name}`
 
-export const products: Product[] = [
+const productDetails: Product[] = [
   {
     id: 1,
     title: 'Колодки тормозные передние, комплект 4 шт.',
@@ -157,12 +159,18 @@ export const products: Product[] = [
   },
 ]
 
+export const products: Product[] = productDetails.map((details) => {
+  const canonical = orderCatalogue.find((item) => item.id === details.id)
+  if (!canonical) throw new Error(`Unknown product ${details.id}`)
+  return { ...details, title: canonical.title, price: canonical.price, inStock: canonical.inStock }
+})
+
 export const categories = [
   { name: 'Двигатель', icon: '🔧' },
-  { name: 'Тормоза', icon: '🛑' },
+  { name: 'Тормозная система', icon: '🛑' },
   { name: 'Подвеска', icon: '⚙️' },
   { name: 'Электрика', icon: '🔌' },
-  { name: 'Масла', icon: '🛢️' },
+  { name: 'Масла и жидкости', icon: '🛢️' },
   { name: 'Шины', icon: '🛞' },
 ]
 
@@ -176,7 +184,6 @@ export const navCategories = [
   'Шины и диски',
 ]
 
-export const formatPrice = (value: number) =>
-  value.toLocaleString('ru-RU') + ' ₽'
+export const formatPrice = (value: number) => value.toLocaleString('ru-RU') + ' ₽'
 
 export const getProduct = (id: number) => products.find((p) => p.id === id)

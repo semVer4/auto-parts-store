@@ -19,9 +19,7 @@ export default function Catalog() {
   const [sort, setSort] = useState<SortKey>('popular')
 
   const toggleBrand = (brand: string) =>
-    setBrands((prev) =>
-      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand],
-    )
+    setBrands((prev) => (prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]))
 
   const result = useMemo(() => {
     let list = products.slice()
@@ -52,9 +50,17 @@ export default function Catalog() {
     <div className="container">
       <nav className="breadcrumbs" aria-label="Хлебные крошки">
         <ul className="breadcrumbs__list">
-          <li><Link to="/">Главная</Link></li>
-          <li><Link to="/catalog">Каталог</Link></li>
-          {category && <li><span aria-current="page">{category}</span></li>}
+          <li>
+            <Link to="/">Главная</Link>
+          </li>
+          <li>
+            <Link to="/catalog">Каталог</Link>
+          </li>
+          {category && (
+            <li>
+              <span aria-current="page">{category}</span>
+            </li>
+          )}
         </ul>
       </nav>
 
@@ -83,20 +89,39 @@ export default function Catalog() {
             <fieldset className="filters__group">
               <legend className="filters__legend">Цена, ₽</legend>
               <div className="filters__price">
-                <label className="visually-hidden" htmlFor="price-from">Цена от</label>
-                <input id="price-from" type="number" placeholder="от" min={0}
-                  value={priceFrom} onChange={(e) => setPriceFrom(e.target.value)} />
-                <label className="visually-hidden" htmlFor="price-to">Цена до</label>
-                <input id="price-to" type="number" placeholder="до" min={0}
-                  value={priceTo} onChange={(e) => setPriceTo(e.target.value)} />
+                <label className="visually-hidden" htmlFor="price-from">
+                  Цена от
+                </label>
+                <input
+                  id="price-from"
+                  type="number"
+                  placeholder="от"
+                  min={0}
+                  value={priceFrom}
+                  onChange={(e) => setPriceFrom(e.target.value)}
+                />
+                <label className="visually-hidden" htmlFor="price-to">
+                  Цена до
+                </label>
+                <input
+                  id="price-to"
+                  type="number"
+                  placeholder="до"
+                  min={0}
+                  value={priceTo}
+                  onChange={(e) => setPriceTo(e.target.value)}
+                />
               </div>
             </fieldset>
 
             <fieldset className="filters__group">
               <legend className="filters__legend">Наличие</legend>
               <label className="filters__option">
-                <input type="checkbox" checked={onlyInStock}
-                  onChange={(e) => setOnlyInStock(e.target.checked)} />
+                <input
+                  type="checkbox"
+                  checked={onlyInStock}
+                  onChange={(e) => setOnlyInStock(e.target.checked)}
+                />
                 Только в наличии
               </label>
             </fieldset>
@@ -107,8 +132,12 @@ export default function Catalog() {
           <div className="toolbar">
             <div className="toolbar__sort">
               <label htmlFor="sort">Сортировка:</label>
-              <select className="toolbar__select" id="sort" value={sort}
-                onChange={(e) => setSort(e.target.value as SortKey)}>
+              <select
+                className="toolbar__select"
+                id="sort"
+                value={sort}
+                onChange={(e) => setSort(e.target.value as SortKey)}
+              >
                 <option value="popular">По популярности</option>
                 <option value="price-asc">Сначала дешёвые</option>
                 <option value="price-desc">Сначала дорогие</option>

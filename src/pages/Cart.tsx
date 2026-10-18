@@ -1,9 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { formatPrice } from '../data/products'
-
-const DELIVERY_THRESHOLD = 5000
-const DELIVERY_COST = 350
+import { deliveryFees } from '../shared/orders'
 
 export default function Cart() {
   const { lines, total, setQty, remove } = useCart()
@@ -18,21 +16,25 @@ export default function Cart() {
           <p className="empty__title">Корзина пуста</p>
           <p>Добавьте товары из каталога, чтобы оформить заказ.</p>
           <p style={{ marginTop: 16 }}>
-            <Link className="btn btn--primary" to="/catalog">Перейти в каталог</Link>
+            <Link className="btn btn--primary" to="/catalog">
+              Перейти в каталог
+            </Link>
           </p>
         </div>
       </div>
     )
   }
 
-  const delivery = total >= DELIVERY_THRESHOLD ? 0 : DELIVERY_COST
-
   return (
     <div className="container">
       <nav className="breadcrumbs" aria-label="Хлебные крошки">
         <ul className="breadcrumbs__list">
-          <li><Link to="/">Главная</Link></li>
-          <li><span aria-current="page">Корзина</span></li>
+          <li>
+            <Link to="/">Главная</Link>
+          </li>
+          <li>
+            <span aria-current="page">Корзина</span>
+          </li>
         </ul>
       </nav>
 
@@ -52,19 +54,45 @@ export default function Cart() {
                 <h2 className="cart-item__title">
                   <Link to={`/product/${product.id}`}>{product.title}</Link>
                 </h2>
-                <p className="cart-item__art">{product.brand} · Артикул: {product.article}</p>
+                <p className="cart-item__art">
+                  {product.brand} · Артикул: {product.article}
+                </p>
                 <div className="cart-item__controls">
                   <div className="qty">
-                    <button className="qty__btn" type="button" aria-label="Уменьшить количество"
-                      onClick={() => setQty(product.id, qty - 1)}>−</button>
-                    <input className="qty__input" type="number" min={1} max={99} value={qty}
+                    <button
+                      className="qty__btn"
+                      type="button"
+                      aria-label="Уменьшить количество"
+                      disabled={qty <= 1}
+                      onClick={() => setQty(product.id, qty - 1)}
+                    >
+                      −
+                    </button>
+                    <input
+                      className="qty__input"
+                      type="number"
+                      min={1}
+                      max={20}
+                      value={qty}
                       aria-label="Количество"
-                      onChange={(e) => setQty(product.id, Math.max(1, Number(e.target.value) || 1))} />
-                    <button className="qty__btn" type="button" aria-label="Увеличить количество"
-                      onClick={() => setQty(product.id, qty + 1)}>+</button>
+                      onChange={(e) => setQty(product.id, Math.max(1, Number(e.target.value) || 1))}
+                    />
+                    <button
+                      className="qty__btn"
+                      type="button"
+                      aria-label="Увеличить количество"
+                      disabled={qty >= 20}
+                      onClick={() => setQty(product.id, qty + 1)}
+                    >
+                      +
+                    </button>
                   </div>
                   <span className="cart-item__price">{formatPrice(product.price * qty)}</span>
-                  <button className="cart-item__remove" type="button" onClick={() => remove(product.id)}>
+                  <button
+                    className="cart-item__remove"
+                    type="button"
+                    onClick={() => remove(product.id)}
+                  >
                     Удалить
                   </button>
                 </div>
@@ -81,13 +109,20 @@ export default function Cart() {
           </div>
           <div className="summary__row">
             <span>Доставка</span>
-            <span>{delivery === 0 ? 'Бесплатно' : formatPrice(delivery)}</span>
+            <span>
+              От {formatPrice(deliveryFees.pickup)} до {formatPrice(deliveryFees.post)}
+            </span>
           </div>
           <div className="summary__row summary__row--total">
-            <span>К оплате</span>
-            <span>{formatPrice(total + delivery)}</span>
+            <span>Товары без доставки</span>
+            <span>{formatPrice(total)}</span>
           </div>
-          <Link className="btn btn--primary" to="/checkout">Оформить заказ</Link>
+          <p className="workflow-caption">
+            Способ и точная стоимость доставки выбираются на следующем шаге.
+          </p>
+          <Link className="btn btn--primary" to="/checkout">
+            Оформить заказ
+          </Link>
         </aside>
       </div>
     </div>
