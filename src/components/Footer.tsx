@@ -1,15 +1,16 @@
 import { Link } from 'react-router-dom'
+import Brand from './Brand'
 
 export default function Footer() {
   return (
-    <footer className="footer">
+    <footer className="footer atelier-footer">
       <div className="container footer__inner">
         <div className="footer__col">
-          <Link className="logo logo--light" to="/" aria-label="АвтоДеталь — на главную">
-            <span className="logo__text">
-              Авто<span>Деталь</span>
-            </span>
-          </Link>
+          <Brand light />
+          <p className="footer__motto">
+            Всё начинается
+            <br />с хороших деталей.
+          </p>
           <p className="footer__about">
             Портфолио-проект: каталог запчастей, оформление и обработка демо-заказов. Не является
             действующим магазином.
@@ -35,7 +36,7 @@ export default function Footer() {
         </nav>
 
         <nav className="footer__col" aria-label="Покупателям">
-          <h3 className="footer__title">Демонстрация</h3>
+          <h3 className="footer__title">Информация</h3>
           <ul className="footer__list">
             <li>
               <Link to="/cart">Корзина</Link>
@@ -45,6 +46,9 @@ export default function Footer() {
             </li>
             <li>
               <Link to="/project">Архитектура и ограничения</Link>
+            </li>
+            <li>
+              <Link to="/contacts">Помощь с заказом</Link>
             </li>
             <li>
               <a

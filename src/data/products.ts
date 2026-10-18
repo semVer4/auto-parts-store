@@ -27,7 +27,7 @@ const productDetails: Product[] = [
     oldPrice: 2990,
     category: 'Тормозная система',
     inStock: true,
-    image: img('product-1.svg'),
+    image: img('editorial-brake-pads.webp'),
     badge: { text: '-15%' },
     specs: [
       { label: 'Производитель', value: 'Bosch' },
@@ -46,7 +46,7 @@ const productDetails: Product[] = [
     price: 480,
     category: 'Масла и жидкости',
     inStock: true,
-    image: img('product-2.svg'),
+    image: img('editorial-oil-filter.webp'),
     specs: [
       { label: 'Производитель', value: 'Mann-Filter' },
       { label: 'Тип', value: 'Навинчиваемый' },
@@ -63,7 +63,7 @@ const productDetails: Product[] = [
     price: 3250,
     category: 'Масла и жидкости',
     inStock: true,
-    image: img('product-3.svg'),
+    image: img('editorial-motor-oil.webp'),
     badge: { text: 'Хит', type: 'hit' },
     specs: [
       { label: 'Производитель', value: 'Mobil' },
@@ -81,7 +81,7 @@ const productDetails: Product[] = [
     price: 6890,
     category: 'Электрика',
     inStock: false,
-    image: img('product-4.svg'),
+    image: img('editorial-battery.webp'),
     specs: [
       { label: 'Производитель', value: 'Varta' },
       { label: 'Ёмкость', value: '60 Ач' },
@@ -98,7 +98,7 @@ const productDetails: Product[] = [
     price: 4120,
     category: 'Тормозная система',
     inStock: true,
-    image: img('product-1.svg'),
+    image: img('editorial-brake-disc.webp'),
     specs: [
       { label: 'Производитель', value: 'Brembo' },
       { label: 'Тип', value: 'Вентилируемый' },
@@ -115,7 +115,7 @@ const productDetails: Product[] = [
     price: 760,
     category: 'Двигатель',
     inStock: true,
-    image: img('product-2.svg'),
+    image: img('editorial-air-filter.webp'),
     specs: [
       { label: 'Производитель', value: 'Mann-Filter' },
       { label: 'Тип', value: 'Панельный' },
@@ -132,7 +132,7 @@ const productDetails: Product[] = [
     oldPrice: 1600,
     category: 'Двигатель',
     inStock: true,
-    image: img('product-3.svg'),
+    image: img('editorial-spark-plugs.webp'),
     badge: { text: '-20%' },
     specs: [
       { label: 'Производитель', value: 'NGK' },
@@ -149,7 +149,7 @@ const productDetails: Product[] = [
     price: 3540,
     category: 'Подвеска',
     inStock: false,
-    image: img('product-4.svg'),
+    image: img('editorial-shock-absorber.webp'),
     specs: [
       { label: 'Производитель', value: 'KYB' },
       { label: 'Тип', value: 'Газомасляный' },

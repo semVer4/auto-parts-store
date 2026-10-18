@@ -53,12 +53,14 @@ export default function Orders() {
       if (!response.ok || !Array.isArray(body.orders))
         throw new Error(body.error || 'Не удалось загрузить заказы.')
       setOrders(body.orders.sort((a, b) => b.createdAt.localeCompare(a.createdAt)))
+      return true
     } catch (failure) {
       setError(
         failure instanceof Error && failure.name !== 'TypeError' && failure.name !== 'AbortError'
           ? failure.message
           : 'Сервер недоступен. Проверьте соединение и повторите загрузку.',
       )
+      return false
     } finally {
       window.clearTimeout(timeout)
       setLoading(false)
@@ -85,10 +87,11 @@ export default function Orders() {
       })
       const body = (await response.json()) as OrderResponse & ApiError
       if (response.status === 409) {
-        await load()
-        setNotice(
-          'Заказ уже изменён в другой вкладке. Список обновлён — проверьте актуальный статус.',
-        )
+        if (await load()) {
+          setNotice(
+            'Заказ уже изменён в другой вкладке. Список обновлён — проверьте актуальный статус.',
+          )
+        }
         return
       }
       if (!response.ok || !body.order?.id)
@@ -112,13 +115,23 @@ export default function Orders() {
   const active = orders.filter((order) => order.status === 'new' || order.status === 'confirmed')
 
   return (
-    <div className="container workflow-page">
-      <div className="workflow-heading">
+    <div className="container workflow-page flow-editorial orders-editorial">
+      <nav className="breadcrumbs" aria-label="Хлебные крошки">
+        <ul className="breadcrumbs__list">
+          <li>
+            <Link to="/">Главная</Link>
+          </li>
+          <li>
+            <span aria-current="page">Заказы</span>
+          </li>
+        </ul>
+      </nav>
+      <header className="workflow-heading flow-pagehead">
         <div>
-          <span className="workflow-eyebrow">Демонстрационная панель</span>
+          <span className="workflow-eyebrow">03 / После оформления</span>
           <h1 className="page-head__title">Заказы</h1>
           <p className="workflow-muted">
-            Создание, обработка и история изменений — в одном сценарии.
+            Состав, статусы и история. Всё, что происходит с заказом.
           </p>
         </div>
         <button
@@ -127,13 +140,22 @@ export default function Orders() {
           onClick={() => void load()}
           disabled={loading || !!updating}
         >
+          <svg
+            className={loading ? 'flow-refresh is-loading' : 'flow-refresh'}
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path d="M20 7v5h-5M4 17v-5h5" />
+            <path d="M5.2 8a7.5 7.5 0 0 1 12.3-3L20 8M4 16l2.5 3A7.5 7.5 0 0 0 18.8 16" />
+          </svg>
           {loading ? 'Обновляем…' : 'Обновить список'}
         </button>
-      </div>
-      <div className="demo-note">
-        <strong>Это не настоящая админка магазина.</strong> Здесь видны только демо-заказы текущей
-        браузерной сессии. Полноценная авторизация и роли не реализованы. Не вводите реальные
-        персональные данные.
+      </header>
+      <div className="demo-note flow-demo-note">
+        <strong>Ваша демо-сессия.</strong> Видны только её заказы. Это не настоящая админка; не
+        вводите реальные персональные данные.
       </div>
       <div className="order-stats">
         <div className="order-stat">
@@ -195,31 +217,37 @@ export default function Orders() {
         </div>
       )}
       {notice && (
-        <div className="notice" role="status">
+        <div className="notice flow-notice" role="status">
           {notice}
         </div>
       )}
       {loading && !orders.length ? (
         <div className="order-skeleton" aria-label="Загрузка заказов" role="status">
-          <span />
-          <span />
-          <span />
+          <p className="flow-loading-caption">Получаем данные с сервера</p>
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
         </div>
       ) : !visible.length && !error ? (
-        <div className="workflow-empty">
-          <span className="workflow-empty__icon" aria-hidden="true">
-            ▤
+        <section className="workflow-empty flow-empty" aria-labelledby="empty-orders-title">
+          <span className="flow-empty__number" aria-hidden="true">
+            03
           </span>
-          <h2>{orders.length ? 'Заказов с таким статусом нет' : 'Пока нет демо-заказов'}</h2>
-          <p>
-            {orders.length
-              ? 'Выберите другой фильтр или создайте новый заказ.'
-              : 'Добавьте товар в корзину и оформите заказ. Он появится здесь после сохранения на сервере.'}
-          </p>
-          <Link className="btn btn--primary" to="/catalog">
-            Выбрать запчасти
-          </Link>
-        </div>
+          <div>
+            <span className="workflow-eyebrow">История начинается с выбора</span>
+            <h2 id="empty-orders-title">
+              {orders.length ? 'Заказов с таким статусом нет' : 'Пока нет демо-заказов'}
+            </h2>
+            <p>
+              {orders.length
+                ? 'Выберите другой фильтр или создайте новый заказ.'
+                : 'Добавьте товар в корзину и оформите заказ. Он появится здесь после сохранения на сервере.'}
+            </p>
+            <Link className="btn btn--primary" to="/catalog">
+              Выбрать запчасти
+            </Link>
+          </div>
+        </section>
       ) : (
         <div className="order-list" aria-busy={loading}>
           {visible.map((order) => (
@@ -227,6 +255,7 @@ export default function Orders() {
               <header className="order-card__header">
                 <div>
                   <span className="workflow-caption">{dateLabel(order.createdAt)}</span>
+                  <span className="flow-order-label">Номер заказа</span>
                   <h2 className="order-card__id">{order.id}</h2>
                 </div>
                 <span className={`status-badge status-badge--${order.status}`}>

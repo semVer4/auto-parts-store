@@ -1,50 +1,49 @@
-import { useState } from 'react'
-import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
-import { navCategories } from '../data/products'
+import Brand from './Brand'
+
+const visibleCategories = ['Двигатель', 'Тормозная система', 'Подвеска', 'Масла и жидкости']
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const { count } = useCart()
   const navigate = useNavigate()
+  const location = useLocation()
+  const currentCategory = new URLSearchParams(location.search).get('category')
+  useEffect(() => {
+    setMenuOpen(false)
+  }, [location.pathname, location.search])
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const q = new FormData(e.currentTarget).get('q') as string
     navigate(`/catalog?q=${encodeURIComponent(q ?? '')}`)
+    setMenuOpen(false)
   }
 
   return (
-    <header className="header">
-      <div className="demo-strip">
-        <div className="container">
-          <span>
-            <strong>DEMO</strong> Портфолио-проект. Без реальных покупок и оплаты.
-          </span>
-          <Link to="/project">
-            О проекте <span aria-hidden="true">↗</span>
-          </Link>
-        </div>
-      </div>
+    <header
+      className="header atelier-header"
+      onKeyDown={(event) => {
+        if (event.key === 'Escape' && menuOpen) {
+          setMenuOpen(false)
+          event.currentTarget.querySelector<HTMLButtonElement>('.burger')?.focus()
+        }
+      }}
+    >
+      <a
+        className="skip-link"
+        href="#main-content"
+        onClick={(event) => {
+          event.preventDefault()
+          document.getElementById('main-content')?.focus()
+        }}
+      >
+        Перейти к содержимому
+      </a>
       <div className="container header__inner">
-        <Link className="logo" to="/" aria-label="АвтоДеталь — на главную">
-          <svg
-            className="logo__icon"
-            width="32"
-            height="32"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-            focusable="false"
-          >
-            <path
-              fill="currentColor"
-              d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 4a6 6 0 0 1 6 6 6 6 0 0 1-6 6 6 6 0 0 1-6-6 6 6 0 0 1 6-6Zm0 2.5A3.5 3.5 0 1 0 12 15.5 3.5 3.5 0 0 0 12 8.5Z"
-            />
-          </svg>
-          <span className="logo__text">
-            Авто<span>Деталь</span>
-          </span>
-        </Link>
+        <Brand />
 
         <form className="search" role="search" onSubmit={handleSearch}>
           <label className="visually-hidden" htmlFor="search-input">
@@ -68,12 +67,20 @@ export default function Header() {
             <span className="header__action-label">Демо-панель</span>
             <span className="header__action-value">Заказы</span>
           </Link>
-          <Link className="header__action header__cart" to="/cart">
-            <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path
-                fill="currentColor"
-                d="M7 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM6.2 4l.94 2H21l-3 8H8l-.6 1.6L7 17h12v2H6a1 1 0 0 1-.94-1.34L6.6 13 3.7 6H1V4h5.2Z"
-              />
+          <Link className="header__action header__cart" to="/cart" aria-label="Корзина">
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path d="M3 3h2l2.5 12h11l2-8H6" />
+              <circle cx="9" cy="20" r="1" />
+              <circle cx="18" cy="20" r="1" />
             </svg>
             <span className="header__action-value">Корзина</span>
             {count > 0 && (
@@ -101,15 +108,30 @@ export default function Header() {
       <nav className={`nav${menuOpen ? ' is-open' : ''}`} id="main-nav" aria-label="Основное меню">
         <div className="container">
           <ul className="nav__list">
-            {navCategories.map((cat) => (
+            <li>
+              <Link
+                className={`nav__link nav__link--catalog${location.pathname === '/catalog' && !currentCategory ? ' active' : ''}`}
+                aria-current={
+                  location.pathname === '/catalog' && !currentCategory ? 'page' : undefined
+                }
+                to="/catalog"
+                onClick={() => setMenuOpen(false)}
+              >
+                Весь каталог <span aria-hidden="true">↗</span>
+              </Link>
+            </li>
+            {visibleCategories.map((cat) => (
               <li key={cat}>
-                <NavLink
-                  className="nav__link"
+                <Link
+                  className={`nav__link${location.pathname === '/catalog' && currentCategory === cat ? ' active' : ''}`}
+                  aria-current={
+                    location.pathname === '/catalog' && currentCategory === cat ? 'page' : undefined
+                  }
                   to={`/catalog?category=${encodeURIComponent(cat)}`}
                   onClick={() => setMenuOpen(false)}
                 >
                   {cat}
-                </NavLink>
+                </Link>
               </li>
             ))}
             <li className="nav__workflow">

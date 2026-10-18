@@ -30,10 +30,15 @@ export default function Checkout() {
   const [order, setOrder] = useState<Order | null>(null)
   const request = useRef<{ fingerprint: string; requestId: string } | null>(null)
   const submitting = useRef(false)
+  const active = useRef(true)
   const errorRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    active.current = true
     void ensureOrderSession().catch(() => undefined)
+    return () => {
+      active.current = false
+    }
   }, [])
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -79,10 +84,14 @@ export default function Checkout() {
         throw new Error(
           'Сервер вернул неожиданный ответ. Повторите отправку или проверьте раздел «Заказы».',
         )
+      // The server may finish after navigation. Do not clear a newer cart
+      // from an unmounted checkout; the saved order remains in «Заказы».
+      if (!active.current) return
       setOrder(body.order)
       clear()
       window.scrollTo(0, 0)
     } catch (failure) {
+      if (!active.current) return
       setError(
         failure instanceof Error && failure.name !== 'AbortError' && failure.name !== 'TypeError'
           ? failure.message
@@ -92,7 +101,7 @@ export default function Checkout() {
     } finally {
       window.clearTimeout(timeout)
       submitting.current = false
-      setPending(false)
+      if (active.current) setPending(false)
     }
   }
 
@@ -109,14 +118,18 @@ export default function Checkout() {
 
   if (order)
     return (
-      <div className="container workflow-page">
+      <div className="container workflow-page flow-editorial receipt-page">
         <div className="receipt" role="status" data-testid="order-receipt">
-          <span className="workflow-eyebrow">Сквозной сценарий завершён</span>
-          <div className="receipt__check" aria-hidden="true">
-            ✓
+          <div className="flow-receipt-heading">
+            <span className="workflow-eyebrow">03 / Результат</span>
+            <div className="receipt__check" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 24 24">
+                <path d="m5 12 4 4L19 6" />
+              </svg>
+            </div>
+            <h1>Демо-заказ сохранён</h1>
+            <p>Сервер принял заказ. Он останется в разделе «Заказы» после обновления страницы.</p>
           </div>
-          <h1>Демо-заказ сохранён</h1>
-          <p>Сервер принял заказ. Он останется в разделе «Заказы» после обновления страницы.</p>
           <dl className="receipt__details">
             <div>
               <dt>Номер заказа</dt>
@@ -135,42 +148,50 @@ export default function Checkout() {
               </dd>
             </div>
           </dl>
-          <p className="workflow-muted">
-            Оплата не списывалась. Письма и реальные отправления не создаются.
-          </p>
-          <div className="workflow-actions">
-            <Link className="btn btn--primary" to="/orders">
-              Посмотреть заказ
-            </Link>
-            <Link className="btn btn--secondary" to="/catalog">
-              Вернуться в каталог
-            </Link>
-          </div>
+          <footer className="flow-receipt-footer">
+            <p className="workflow-muted">
+              Оплата не списывалась. Письма и реальные отправления не создаются.
+            </p>
+            <div className="workflow-actions">
+              <Link className="btn btn--primary" to="/orders">
+                Посмотреть заказ
+              </Link>
+              <Link className="btn btn--secondary" to="/catalog">
+                Вернуться в каталог
+              </Link>
+            </div>
+          </footer>
         </div>
       </div>
     )
 
   if (!lines.length)
     return (
-      <div className="container workflow-page">
-        <div className="page-head">
-          <h1 className="page-head__title">Оформление заказа</h1>
-        </div>
-        <div className="workflow-empty">
-          <span className="workflow-empty__icon" aria-hidden="true">
-            ＋
+      <div className="container workflow-page flow-editorial checkout-editorial">
+        <header className="flow-pagehead">
+          <div>
+            <span className="workflow-eyebrow">02 / Оформление</span>
+            <h1 className="page-head__title">Оформление заказа</h1>
+          </div>
+        </header>
+        <section className="workflow-empty flow-empty" aria-labelledby="checkout-empty-title">
+          <span className="flow-empty__number" aria-hidden="true">
+            02
           </span>
-          <h2>Сначала добавим запчасти</h2>
-          <p>Выберите любой товар в каталоге, чтобы проверить оформление демо-заказа.</p>
-          <Link className="btn btn--primary" to="/catalog">
-            Перейти в каталог
-          </Link>
-        </div>
+          <div>
+            <span className="workflow-eyebrow">Перед следующим шагом</span>
+            <h2 id="checkout-empty-title">Сначала добавим запчасти</h2>
+            <p>Выберите любой товар в каталоге, чтобы проверить оформление демо-заказа.</p>
+            <Link className="btn btn--primary" to="/catalog">
+              Перейти в каталог
+            </Link>
+          </div>
+        </section>
       </div>
     )
 
   return (
-    <div className="container workflow-page">
+    <div className="container workflow-page flow-editorial checkout-editorial">
       <nav className="breadcrumbs" aria-label="Хлебные крошки">
         <ul className="breadcrumbs__list">
           <li>
@@ -184,27 +205,66 @@ export default function Checkout() {
           </li>
         </ul>
       </nav>
-      <div className="workflow-heading">
+      <header className="workflow-heading flow-pagehead">
         <div>
-          <span className="workflow-eyebrow">Последний шаг</span>
+          <span className="workflow-eyebrow">02 / Оформление</span>
           <h1 className="page-head__title">Оформление заказа</h1>
-          <p className="workflow-muted">Демо-сценарий с настоящим сохранением на сервере.</p>
+          <p className="workflow-muted">Контакты, способ получения — и заказ готов к сохранению.</p>
         </div>
-        <Link className="workflow-text-link" to="/cart">
-          ← Изменить корзину
+        <Link
+          className="workflow-text-link flow-back-link"
+          to="/cart"
+          aria-label="← Изменить корзину"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 12H5m6 6-6-6 6-6" />
+          </svg>
+          Изменить корзину
         </Link>
-      </div>
-      <div className="demo-note">
-        <strong>Пожалуйста, используйте тестовые данные.</strong> Это портфолио, не настоящий
-        магазин. Заказ не требует оплаты и никуда не отправляется.
+      </header>
+      <div className="demo-note flow-demo-note">
+        <strong>Только тестовые контакты.</strong> Это демонстрация: без оплаты, писем и реальной
+        доставки.
       </div>
       <form className="cart checkout-form" onSubmit={handleSubmit} aria-busy={pending}>
-        <div>
+        {error && (
+          <div
+            className="workflow-error flow-error-summary"
+            role="alert"
+            tabIndex={-1}
+            ref={errorRef}
+          >
+            <span className="workflow-eyebrow">Заказ пока не подтверждён</span>
+            <h2>Не удалось сохранить заказ</h2>
+            <p>{error}</p>
+            {['name', 'phone', 'email', 'address'].some((key) => fieldError(key)) && (
+              <ul>
+                {['name', 'phone', 'email', 'address']
+                  .filter((key) => fieldError(key))
+                  .map((key) => (
+                    <li key={key}>
+                      <button
+                        className="workflow-text-link"
+                        type="button"
+                        onClick={() => document.getElementById(key)?.focus()}
+                      >
+                        {fieldError(key)}
+                      </button>
+                    </li>
+                  ))}
+              </ul>
+            )}
+          </div>
+        )}
+        <div className="flow-checkout-fields">
           <fieldset className="checkout-block workflow-fieldset" disabled={pending}>
             <legend className="visually-hidden">Контактные данные</legend>
             <div className="checkout-block__heading">
               <h2 className="checkout-block__title">
-                <span className="step-number">1</span> Контактные данные
+                <span className="step-number" aria-hidden="true">
+                  01
+                </span>{' '}
+                Контактные данные
               </h2>
               <button className="workflow-text-link" type="button" onClick={fillDemo}>
                 Заполнить тестовыми данными
@@ -286,7 +346,10 @@ export default function Checkout() {
           <fieldset className="checkout-block workflow-fieldset" disabled={pending}>
             <legend className="visually-hidden">Способ доставки</legend>
             <h2 className="checkout-block__title">
-              <span className="step-number">2</span> Способ доставки
+              <span className="step-number" aria-hidden="true">
+                02
+              </span>{' '}
+              Способ доставки
             </h2>
             {(Object.keys(deliveryFees) as DeliveryMethod[]).map((method) => (
               <label
@@ -302,7 +365,9 @@ export default function Checkout() {
                 />
                 <span className="delivery-option">
                   <span className="radio-card__title">{deliveryLabels[method]}</span>
-                  <span className="radio-card__desc">Условная доставка для проверки расчёта</span>
+                  <span className="radio-card__desc">
+                    {method === 'pickup' ? 'Без адреса доставки' : 'С указанием тестового адреса'}
+                  </span>
                 </span>
                 <strong>
                   {deliveryFees[method] ? formatPrice(deliveryFees[method]) : 'Бесплатно'}
@@ -336,7 +401,10 @@ export default function Checkout() {
             )}
           </fieldset>
           <div className="workflow-security">
-            <span aria-hidden="true">◇</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m12 3 8 3v6c0 4-4 7-8 9-4-2-8-5-8-9V6l8-3Z" />
+              <path d="m8 12 3 3 5-6" />
+            </svg>
             <p>
               <strong>Без онлайн-оплаты</strong>
               <br />В демо проверяется создание и обработка заказа. Банковские данные не
@@ -344,8 +412,8 @@ export default function Checkout() {
             </p>
           </div>
         </div>
-        <aside className="summary workflow-summary">
-          <span className="workflow-eyebrow">Проверка перед отправкой</span>
+        <aside className="summary workflow-summary flow-summary">
+          <span className="workflow-eyebrow">Проверка / перед отправкой</span>
           <h2 className="summary__title">Ваш заказ</h2>
           {lines.map(({ product, qty }) => (
             <div className="summary__row" key={product.id}>
@@ -372,11 +440,6 @@ export default function Checkout() {
             <span>Итого</span>
             <span data-testid="checkout-total">{formatPrice(total + deliveryFees[delivery])}</span>
           </div>
-          {error && (
-            <div className="workflow-error" role="alert" tabIndex={-1} ref={errorRef}>
-              {error}
-            </div>
-          )}
           <button className="btn btn--primary" type="submit" disabled={pending}>
             {pending ? 'Сохраняем заказ…' : error ? 'Повторить отправку' : 'Создать демо-заказ'}
           </button>

@@ -1,124 +1,231 @@
-import { Link } from 'react-router-dom'
+import { type FormEvent } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import ProductCard from '../components/ProductCard'
-import { categories, products } from '../data/products'
+import { products } from '../data/products'
 
-const advantages = [
-  {
-    title: 'Каталог и фильтры',
-    text: 'Поиск по названию, бренду и артикулу; фильтрация по категории и наличию.',
-  },
-  {
-    title: 'Серверный расчёт',
-    text: 'API проверяет товары и считает итог вместе с выбранным способом доставки.',
-  },
-  {
-    title: 'Сохранение заказов',
-    text: 'Заказы сохраняются на сервере и доступны после перезагрузки в этой демо-сессии.',
-  },
-  {
-    title: 'История статусов',
-    text: 'Подтверждение, отправка и отмена с проверкой допустимых переходов и версии заказа.',
-  },
-]
+function Arrow({ diagonal = false }: { diagonal?: boolean }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      {diagonal ? <path d="M6 18 18 6M6 6h12v12" /> : <path d="M4 12h15m-6-6 6 6-6 6" />}
+    </svg>
+  )
+}
+
+function itemCount(count: number) {
+  return `${count} ${count === 1 ? 'товар' : count < 5 ? 'товара' : 'товаров'}`
+}
 
 export default function Home() {
-  const hits = products.slice(0, 4)
+  const navigate = useNavigate()
+  const selection = [2, 1, 3, 5]
+    .map((id) => products.find((product) => product.id === id)!)
+    .filter(Boolean)
+  const categories = [...new Set(products.map((product) => product.category))]
+
+  const handleSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const query = String(new FormData(event.currentTarget).get('q') ?? '').trim()
+    navigate(`/catalog${query ? `?q=${encodeURIComponent(query)}` : ''}`)
+  }
 
   return (
-    <>
-      <section className="hero">
-        <div className="container hero__inner">
-          <div className="hero__content">
-            <h1 className="hero__title">От выбора детали до&nbsp;сохранённого&nbsp;заказа</h1>
-            <p className="hero__text">
-              Демо-магазин с настоящим API, серверной проверкой заказа и историей статусов. Пройдите
-              весь сценарий с тестовыми данными — без оплаты и реальных поставок.
+    <div className="editorial-home">
+      <section className="editorial-hero container" aria-labelledby="home-title">
+        <div className="editorial-hero__masthead">
+          <span>Автодеталь / Незаменимые детали</span>
+          <span className="editorial-hero__edition">Каталог № 01</span>
+        </div>
+        <div className="editorial-hero__layout">
+          <div className="editorial-hero__copy">
+            <p className="editorial-kicker">
+              <span /> Сделано для движения
             </p>
-            <div className="hero__actions">
-              <Link className="btn btn--primary" to="/catalog">
-                Перейти в каталог
+            <h1 id="home-title" className="editorial-hero__title">
+              <span>Движение</span> <span>начинается</span>{' '}
+              <span className="editorial-hero__accent">с деталей.</span>
+            </h1>
+            <p className="editorial-hero__intro">
+              Большие маршруты начинаются с малого.
+              <br className="editorial-desktop-break" /> Найдите нужную деталь — и проверьте весь
+              путь до заказа.
+            </p>
+            <form className="editorial-search" role="search" onSubmit={handleSearch}>
+              <label className="visually-hidden" htmlFor="home-part-search">
+                Поиск детали по названию или артикулу
+              </label>
+              <svg
+                className="editorial-search__icon"
+                width="21"
+                height="21"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <circle cx="10.5" cy="10.5" r="6.5" />
+                <path d="m16 16 4 4" />
+              </svg>
+              <input
+                id="home-part-search"
+                name="q"
+                type="search"
+                placeholder="Название или артикул"
+                autoComplete="off"
+              />
+              <button type="submit">
+                <span>Найти деталь</span>
+                <Arrow />
+              </button>
+            </form>
+            <div className="editorial-search-hints">
+              <span>Например:</span>
+              <Link to="/catalog?q=W71275">W71275</Link>
+              <Link to="/catalog?q=5W-40">Масло 5W-40</Link>
+            </div>
+          </div>
+          <figure className="editorial-hero__visual">
+            <div className="editorial-hero__image">
+              <img
+                src="/img/editorial-car-hero.webp"
+                alt="Красный спортивный автомобиль в светлом индустриальном интерьере"
+                width="1536"
+                height="1024"
+                loading="eager"
+                decoding="async"
+              />
+            </div>
+            <figcaption>
+              <span>Форма следует функции.</span>
+              <span>
+                Точность — в деталях <Arrow diagonal />
+              </span>
+            </figcaption>
+          </figure>
+        </div>
+        <div className="editorial-hero__footnote">
+          <span>Каталог. Корзина. Сохранённый заказ.</span>
+          <p>
+            <span className="editorial-demo-dot" /> Портфолио-проект · без реальных покупок
+          </p>
+        </div>
+      </section>
+
+      <section className="editorial-categories container" aria-labelledby="home-categories-title">
+        <div className="editorial-section-label">
+          <span className="editorial-kicker">01 / Навигация</span>
+          <h2 id="home-categories-title">
+            Нужная система. <br />
+            Нужная деталь.
+          </h2>
+          <p>
+            {products.length} демо-товаров в {categories.length} разделах
+          </p>
+        </div>
+        <ul className="editorial-category-list">
+          {categories.map((category, index) => (
+            <li key={category}>
+              <Link
+                className="editorial-category"
+                to={`/catalog?category=${encodeURIComponent(category)}`}
+              >
+                <span className="editorial-category__index">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <span className="editorial-category__name">{category}</span>
+                <span className="editorial-category__count">
+                  {itemCount(products.filter((product) => product.category === category).length)}
+                </span>
+                <Arrow diagonal />
               </Link>
-              <Link className="btn btn--ghost" to="/project">
-                Как устроен проект
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="editorial-selection" aria-labelledby="home-selection-title">
+        <div className="container">
+          <div className="editorial-section-heading">
+            <div>
+              <span className="editorial-kicker">02 / Детали каталога</span>
+              <h2 id="home-selection-title">
+                Для следующего <br />
+                <span>километра.</span>
+              </h2>
+            </div>
+            <div className="editorial-section-heading__aside">
+              <p>
+                От регулярного обслуживания <br />
+                до внимания к каждой мелочи.
+              </p>
+              <Link className="editorial-link" to="/catalog">
+                Весь каталог <Arrow />
               </Link>
             </div>
           </div>
-          <ul className="hero__features">
-            <li className="hero__feature">
-              <strong>{products.length}</strong>
-              <span>демо-товаров</span>
-            </li>
-            <li className="hero__feature">
-              <strong>API</strong>
-              <span>сохранение на сервере</span>
-            </li>
-            <li className="hero__feature">
-              <strong>4 статуса</strong>
-              <span>контроль жизненного цикла</span>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="container">
-          <h2 className="section__title">Популярные категории</h2>
-          <ul className="categories">
-            {categories.map((c) => (
-              <li className="category" key={c.name}>
-                <Link
-                  className="category__link"
-                  to={`/catalog?category=${encodeURIComponent(c.name)}`}
-                >
-                  <span className="category__icon" aria-hidden="true">
-                    {c.icon}
-                  </span>
-                  <span className="category__name">{c.name}</span>
-                </Link>
+          <ul className="editorial-products">
+            {selection.map((product) => (
+              <li key={product.id}>
+                <ProductCard product={product} />
               </li>
             ))}
           </ul>
+          <p className="editorial-selection__note">
+            Демонстрационные товары и цены. Реальную совместимость с автомобилем необходимо
+            проверять отдельно.
+          </p>
         </div>
       </section>
 
-      <section className="section">
-        <div className="container">
-          <h2 className="section__title">Товары для демонстрации</h2>
-          <ul className="products">
-            {hits.map((p) => (
-              <li className="product" key={p.id}>
-                <ProductCard product={p} />
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      <section className="section section--muted">
-        <div className="container">
-          <h2 className="section__title">Что можно проверить</h2>
-          <ul className="advantages">
-            {advantages.map((a) => (
-              <li className="advantage" key={a.title}>
-                <h3 className="advantage__title">{a.title}</h3>
-                <p className="advantage__text">{a.text}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      <section className="section subscribe">
-        <div className="container subscribe__inner">
-          <div className="subscribe__text">
-            <h2 className="section__title">Посмотрите на проект изнутри</h2>
-            <p>Архитектура, ограничения, тесты и сценарий демонстрации — без скрытых заглушек.</p>
-          </div>
-          <Link className="btn btn--primary" to="/project">
-            Открыть описание проекта
+      <section className="editorial-route container" aria-labelledby="home-route-title">
+        <div className="editorial-route__intro">
+          <span className="editorial-kicker">03 / От выбора к результату</span>
+          <h2 id="home-route-title">
+            Простой путь. <br />
+            Рабочий сценарий.
+          </h2>
+          <p>За внешним видом — настоящее сохранение заказа. Попробуйте с тестовыми данными.</p>
+          <Link className="editorial-link" to="/project">
+            Как устроен проект <Arrow />
           </Link>
         </div>
+        <ol className="editorial-route__steps">
+          <li>
+            <span>01</span>
+            <div>
+              <h3>Выберите деталь</h3>
+              <p>По названию, артикулу или категории.</p>
+            </div>
+            <Arrow />
+          </li>
+          <li>
+            <span>02</span>
+            <div>
+              <h3>Соберите заказ</h3>
+              <p>Добавьте тестовые контакты и способ доставки.</p>
+            </div>
+            <Arrow />
+          </li>
+          <li>
+            <span>03</span>
+            <div>
+              <h3>Проверьте результат</h3>
+              <p>Заказ сохранён. Статус и история — в демо-панели.</p>
+            </div>
+            <Link to="/orders" aria-label="Перейти в демо-панель заказов">
+              <Arrow diagonal />
+            </Link>
+          </li>
+        </ol>
       </section>
-    </>
+      <div className="editorial-endnote container">
+        <span>Автодеталь.</span>
+        <p>
+          Демонстрация интерфейса и процесса заказа. <br />
+          Без оплаты, реальной доставки и настоящих персональных данных.
+        </p>
+        <Link to="/project">
+          Подробнее о проекте <Arrow diagonal />
+        </Link>
+      </div>
+    </div>
   )
 }

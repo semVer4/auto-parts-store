@@ -2,12 +2,23 @@ import { Link } from 'react-router-dom'
 
 export default function Project() {
   return (
-    <div className="container workflow-page project-page">
+    <div className="container workflow-page project-page editorial-content">
+      <nav className="breadcrumbs" aria-label="Хлебные крошки">
+        <ul className="breadcrumbs__list">
+          <li>
+            <Link to="/">Главная</Link>
+          </li>
+          <li>
+            <span aria-current="page">О проекте</span>
+          </li>
+        </ul>
+      </nav>
       <div className="project-hero">
         <div>
-          <span className="workflow-eyebrow">Portfolio / AI-assisted development</span>
+          <span className="workflow-eyebrow">Под капотом / О проекте</span>
           <h1>
-            Из витрины —<br />в рабочий сценарий
+            Из витрины — <br />
+            <span>в рабочий сценарий.</span>
           </h1>
           <p>
             АвтоДеталь — демонстрационный проект интернет-магазина. Главный сценарий: выбрать товар,
@@ -27,19 +38,46 @@ export default function Project() {
             </a>
           </div>
         </div>
-        <div className="project-flow" aria-label="Сценарий проекта">
-          <span>01 · Каталог и корзина</span>
-          <b aria-hidden="true">↓</b>
-          <span>02 · Валидация и серверный расчёт</span>
-          <b aria-hidden="true">↓</b>
-          <span>03 · Сохранение заказа</span>
-          <b aria-hidden="true">↓</b>
-          <span>04 · Статусы и история</span>
+        <div className="project-diagram" aria-label="Сценарий проекта">
+          <p className="project-diagram__label">От интерфейса до результата</p>
+          <ol>
+            <li>
+              <span>01</span>
+              <div>
+                <strong>Каталог и корзина</strong>
+                <p>React / TypeScript</p>
+              </div>
+            </li>
+            <li>
+              <span>02</span>
+              <div>
+                <strong>Проверка и расчёт</strong>
+                <p>Netlify Functions / API</p>
+              </div>
+            </li>
+            <li>
+              <span>03</span>
+              <div>
+                <strong>Сохранённый заказ</strong>
+                <p>Netlify Blobs / отдельная сессия</p>
+              </div>
+            </li>
+            <li>
+              <span>04</span>
+              <div>
+                <strong>Статусы и история</strong>
+                <p>Контроль версии и переходов</p>
+              </div>
+            </li>
+          </ol>
+          <p className="project-diagram__foot">
+            Данные сохраняются на сервере, а не только на экране.
+          </p>
         </div>
       </div>
       <section className="project-section">
         <span className="workflow-eyebrow">Что реализовано</span>
-        <h2>Не только успешный экран</h2>
+        <h2>Детали реализации.</h2>
         <div className="project-grid">
           <article>
             <span className="project-card__number">01</span>
@@ -78,7 +116,7 @@ export default function Project() {
       <section className="project-section project-demo">
         <div>
           <span className="workflow-eyebrow">Проверка за несколько минут</span>
-          <h2>Пройдите весь путь</h2>
+          <h2>Пройдите весь путь.</h2>
           <p>
             Никакой регистрации и банковской карты. Используйте кнопку заполнения тестовыми данными.
           </p>
