@@ -46,8 +46,8 @@ export default function Home() {
             </h1>
             <p className="editorial-hero__intro">
               Большие маршруты начинаются с малого.
-              <br className="editorial-desktop-break" /> Найдите нужную деталь — и проверьте весь
-              путь до заказа.
+              <br className="editorial-desktop-break" /> Найдите нужную деталь по названию или
+              артикулу.
             </p>
             <form className="editorial-search" role="search" onSubmit={handleSearch}>
               <label className="visually-hidden" htmlFor="home-part-search">
@@ -103,9 +103,7 @@ export default function Home() {
         </div>
         <div className="editorial-hero__footnote">
           <span>Каталог. Корзина. Сохранённый заказ.</span>
-          <p>
-            <span className="editorial-demo-dot" /> Портфолио-проект · без реальных покупок
-          </p>
+          <p>Поиск по названию и артикулу</p>
         </div>
       </section>
 
@@ -117,7 +115,7 @@ export default function Home() {
             Нужная деталь.
           </h2>
           <p>
-            {products.length} демо-товаров в {categories.length} разделах
+            {products.length} товаров в {categories.length} разделах
           </p>
         </div>
         <ul className="editorial-category-list">
@@ -169,8 +167,7 @@ export default function Home() {
             ))}
           </ul>
           <p className="editorial-selection__note">
-            Демонстрационные товары и цены. Реальную совместимость с автомобилем необходимо
-            проверять отдельно.
+            Сверьте артикул и совместимость детали с вашим автомобилем.
           </p>
         </div>
       </section>
@@ -180,11 +177,11 @@ export default function Home() {
           <span className="editorial-kicker">03 / От выбора к результату</span>
           <h2 id="home-route-title">
             Простой путь. <br />
-            Рабочий сценарий.
+            Всё по порядку.
           </h2>
-          <p>За внешним видом — настоящее сохранение заказа. Попробуйте с тестовыми данными.</p>
-          <Link className="editorial-link" to="/project">
-            Как устроен проект <Arrow />
+          <p>Найдите деталь, укажите количество и соберите заказ в корзине.</p>
+          <Link className="editorial-link" to="/catalog">
+            Перейти в каталог <Arrow />
           </Link>
         </div>
         <ol className="editorial-route__steps">
@@ -200,17 +197,17 @@ export default function Home() {
             <span>02</span>
             <div>
               <h3>Соберите заказ</h3>
-              <p>Добавьте тестовые контакты и способ доставки.</p>
+              <p>Укажите количество и проверьте состав корзины.</p>
             </div>
             <Arrow />
           </li>
           <li>
             <span>03</span>
             <div>
-              <h3>Проверьте результат</h3>
-              <p>Заказ сохранён. Статус и история — в демо-панели.</p>
+              <h3>Следите за статусом</h3>
+              <p>История и изменения заказа — в разделе «Заказы».</p>
             </div>
-            <Link to="/orders" aria-label="Перейти в демо-панель заказов">
+            <Link to="/orders" aria-label="Перейти к заказам">
               <Arrow diagonal />
             </Link>
           </li>
@@ -219,11 +216,11 @@ export default function Home() {
       <div className="editorial-endnote container">
         <span>Автодеталь.</span>
         <p>
-          Демонстрация интерфейса и процесса заказа. <br />
-          Без оплаты, реальной доставки и настоящих персональных данных.
+          Детали для обслуживания и ремонта. <br />
+          Поиск по названию, бренду и артикулу.
         </p>
-        <Link to="/project">
-          Подробнее о проекте <Arrow diagonal />
+        <Link to="/catalog">
+          Открыть каталог <Arrow diagonal />
         </Link>
       </div>
     </div>

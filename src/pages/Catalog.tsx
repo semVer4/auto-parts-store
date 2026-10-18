@@ -102,9 +102,9 @@ export default function Catalog() {
           <p>Точная деталь — правильное начало.</p>
         </div>
         <div className="catalog-heading__note">
-          <span className="catalog-demo-marker" /> Демо-каталог
+          Подбор деталей
           <br />
-          <small>Товары и цены для проверки сценария</small>
+          <small>По названию, бренду и артикулу</small>
         </div>
       </div>
       <nav className="catalog-sections" aria-label="Категории каталога">
@@ -204,7 +204,7 @@ export default function Catalog() {
               <path d="M12 3 3 7v5c0 5 9 9 9 9s9-4 9-9V7l-9-4Z" />
               <path d="m8 12 3 3 5-6" />
             </svg>
-            <p>Выбор в демо не подтверждает совместимость детали с автомобилем.</p>
+            <p>Сверьте артикул и совместимость детали с вашим автомобилем.</p>
           </div>
         </aside>
         <section className="catalog-results" aria-label="Список товаров">
@@ -319,11 +319,9 @@ export default function Catalog() {
       </div>
       <div className="catalog-bottom-note">
         <span>Деталь за деталью.</span>
-        <p>
-          Каталог — часть портфолио-проекта. Для проверки заказа используйте только тестовые данные.
-        </p>
-        <Link to="/project">
-          Как устроено демо <span aria-hidden="true">↗</span>
+        <p>Уточняйте выбор по бренду, категории и характеристикам.</p>
+        <Link to="/cart">
+          Перейти в корзину <span aria-hidden="true">↗</span>
         </Link>
       </div>
     </div>

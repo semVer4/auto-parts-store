@@ -12,8 +12,8 @@ export default function Footer() {
             <br />с хороших деталей.
           </p>
           <p className="footer__about">
-            Портфолио-проект: каталог запчастей, оформление и обработка демо-заказов. Не является
-            действующим магазином.
+            Каталог автозапчастей. Поиск по названию, производителю и артикулу — для внимания к
+            каждой детали.
           </p>
         </div>
 
@@ -45,7 +45,7 @@ export default function Footer() {
               <Link to="/orders">Заказы и статусы</Link>
             </li>
             <li>
-              <Link to="/project">Архитектура и ограничения</Link>
+              <Link to="/project">О сайте</Link>
             </li>
             <li>
               <Link to="/contacts">Помощь с заказом</Link>
@@ -63,17 +63,17 @@ export default function Footer() {
         </nav>
 
         <div className="footer__col">
-          <h3 className="footer__title">Перед проверкой</h3>
+          <h3 className="footer__title">Внимание к деталям</h3>
           <p className="footer__contacts">
-            Используйте только тестовые данные. Оплата не списывается, реальные заказы и доставка не
-            выполняются.
+            Проверяйте артикул, характеристики и применимость к вашему автомобилю перед выбором
+            запчастей.
           </p>
         </div>
       </div>
 
       <div className="footer__bottom">
         <div className="container">
-          <p>АвтоДеталь · Демонстрационный проект · React / TypeScript / Serverless API</p>
+          <p>АвтоДеталь · Детали для движения</p>
         </div>
       </div>
     </footer>

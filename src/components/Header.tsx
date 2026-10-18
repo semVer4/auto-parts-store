@@ -64,7 +64,7 @@ export default function Header() {
 
         <div className="header__actions">
           <Link className="header__action" to="/orders">
-            <span className="header__action-label">Демо-панель</span>
+            <span className="header__action-label">Панель заказов</span>
             <span className="header__action-value">Заказы</span>
           </Link>
           <Link className="header__action header__cart" to="/cart" aria-label="Корзина">
@@ -141,7 +141,7 @@ export default function Header() {
             </li>
             <li>
               <NavLink className="nav__link" to="/project" onClick={() => setMenuOpen(false)}>
-                О проекте
+                О сайте
               </NavLink>
             </li>
           </ul>
