@@ -147,9 +147,6 @@ export default function Cart() {
                 <path d="M4 12h15m-6-6 6 6-6 6" />
               </svg>
             </Link>
-            <p className="flow-summary__footnote">
-              Демонстрационный заказ. Реальная оплата не производится.
-            </p>
           </aside>
         </div>
       )}

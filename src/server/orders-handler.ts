@@ -239,7 +239,7 @@ export function createOrdersHandler(repository: OrderRepository, options: Handle
             return json({ order: previous.order, replayed: true }, 200, cookie)
           }
           if (entries.length >= MAX_ORDERS)
-            throw new HttpError(429, 'Лимит демо-сессии: 20 заказов.')
+            throw new HttpError(429, 'Достигнут лимит: не более 20 заказов.')
           if (
             await repository.write(
               session.key,
@@ -261,7 +261,7 @@ export function createOrdersHandler(repository: OrderRepository, options: Handle
         throw new HttpError(422, 'Укажите корректный статус и версию заказа.')
       const snapshot = await repository.read(session.key)
       const entry = snapshot?.data.orders.find((entry) => entry.order.id === match![1])
-      if (!snapshot || !entry) throw new HttpError(404, 'Заказ не найден в этой демо-сессии.')
+      if (!snapshot || !entry) throw new HttpError(404, 'Заказ не найден.')
       if (entry.order.version !== body.version)
         throw new HttpError(409, 'Заказ уже изменён. Обновите список.')
       const nextStatus = body.status as OrderStatus

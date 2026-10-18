@@ -153,15 +153,11 @@ export default function Orders() {
           {loading ? 'Обновляем…' : 'Обновить список'}
         </button>
       </header>
-      <div className="demo-note flow-demo-note">
-        <strong>Ваша демо-сессия.</strong> Видны только её заказы. Это не настоящая админка; не
-        вводите реальные персональные данные.
-      </div>
       <div className="order-stats">
         <div className="order-stat">
           <span>Всего заказов</span>
           <strong>{orders.length}</strong>
-          <small>В вашей демо-сессии</small>
+          <small>Доступны в этом браузере</small>
         </div>
         <div className="order-stat">
           <span>В обработке</span>
@@ -177,7 +173,7 @@ export default function Orders() {
                 .reduce((sum, order) => sum + order.total, 0),
             )}
           </strong>
-          <small>Демонстрационные суммы, не выручка</small>
+          <small>Общая стоимость с доставкой</small>
         </div>
       </div>
       <div className="order-toolbar">
@@ -236,12 +232,12 @@ export default function Orders() {
           <div>
             <span className="workflow-eyebrow">История начинается с выбора</span>
             <h2 id="empty-orders-title">
-              {orders.length ? 'Заказов с таким статусом нет' : 'Пока нет демо-заказов'}
+              {orders.length ? 'Заказов с таким статусом нет' : 'Пока нет заказов'}
             </h2>
             <p>
               {orders.length
                 ? 'Выберите другой фильтр или создайте новый заказ.'
-                : 'Добавьте товар в корзину и оформите заказ. Он появится здесь после сохранения на сервере.'}
+                : 'Добавьте товар в корзину и оформите заказ. Состав, статус и история появятся здесь.'}
             </p>
             <Link className="btn btn--primary" to="/catalog">
               Выбрать запчасти
@@ -287,7 +283,7 @@ export default function Orders() {
                 </div>
                 <dl className="order-customer">
                   <div>
-                    <dt>Тестовый покупатель</dt>
+                    <dt>Покупатель</dt>
                     <dd>{order.customer.name}</dd>
                   </div>
                   <div>

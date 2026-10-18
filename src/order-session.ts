@@ -14,7 +14,7 @@ export function ensureOrderSession(): Promise<void> {
           signal: controller.signal,
         })
         if (!response.ok)
-          throw new Error('Не удалось подготовить демо-сессию. Повторите отправку чуть позже.')
+          throw new Error('Не удалось загрузить данные. Обновите страницу и попробуйте ещё раз.')
       } finally {
         window.clearTimeout(timeout)
       }

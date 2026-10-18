@@ -105,13 +105,13 @@ export default function Checkout() {
     }
   }
 
-  const fillDemo = () => {
+  const fillExample = () => {
     setCustomer({
-      name: 'Тестовый покупатель',
+      name: 'Покупатель Пример',
       phone: '+7 999 000-00-00',
-      email: 'demo@example.com',
+      email: 'buyer@example.com',
     })
-    setAddress('Тестовый город, Примерная улица, дом 1')
+    setAddress('Город, Примерная улица, дом 1')
     setFields({})
   }
   const fieldError = (key: string) => fields[key] || fields[`customer.${key}`]
@@ -127,8 +127,8 @@ export default function Checkout() {
                 <path d="m5 12 4 4L19 6" />
               </svg>
             </div>
-            <h1>Демо-заказ сохранён</h1>
-            <p>Сервер принял заказ. Он останется в разделе «Заказы» после обновления страницы.</p>
+            <h1>Заказ оформлен</h1>
+            <p>Номер, состав и история доступны в разделе «Заказы».</p>
           </div>
           <dl className="receipt__details">
             <div>
@@ -149,9 +149,7 @@ export default function Checkout() {
             </div>
           </dl>
           <footer className="flow-receipt-footer">
-            <p className="workflow-muted">
-              Оплата не списывалась. Письма и реальные отправления не создаются.
-            </p>
+            <p className="workflow-muted">Данные заказа сохранены.</p>
             <div className="workflow-actions">
               <Link className="btn btn--primary" to="/orders">
                 Посмотреть заказ
@@ -181,7 +179,7 @@ export default function Checkout() {
           <div>
             <span className="workflow-eyebrow">Перед следующим шагом</span>
             <h2 id="checkout-empty-title">Сначала добавим запчасти</h2>
-            <p>Выберите любой товар в каталоге, чтобы проверить оформление демо-заказа.</p>
+            <p>Выберите товары в каталоге и добавьте их в корзину для оформления заказа.</p>
             <Link className="btn btn--primary" to="/catalog">
               Перейти в каталог
             </Link>
@@ -223,8 +221,8 @@ export default function Checkout() {
         </Link>
       </header>
       <div className="demo-note flow-demo-note">
-        <strong>Только тестовые контакты.</strong> Это демонстрация: без оплаты, писем и реальной
-        доставки.
+        <strong>Оплата и доставка через сайт не выполняются.</strong> Для ознакомления используйте
+        вымышленные контакты.
       </div>
       <form className="cart checkout-form" onSubmit={handleSubmit} aria-busy={pending}>
         {error && (
@@ -266,8 +264,8 @@ export default function Checkout() {
                 </span>{' '}
                 Контактные данные
               </h2>
-              <button className="workflow-text-link" type="button" onClick={fillDemo}>
-                Заполнить тестовыми данными
+              <button className="workflow-text-link" type="button" onClick={fillExample}>
+                Заполнить пример
               </button>
             </div>
             <div className="form-grid">
@@ -366,7 +364,7 @@ export default function Checkout() {
                 <span className="delivery-option">
                   <span className="radio-card__title">{deliveryLabels[method]}</span>
                   <span className="radio-card__desc">
-                    {method === 'pickup' ? 'Без адреса доставки' : 'С указанием тестового адреса'}
+                    {method === 'pickup' ? 'Без адреса доставки' : 'С указанием адреса'}
                   </span>
                 </span>
                 <strong>
@@ -377,7 +375,7 @@ export default function Checkout() {
             {delivery !== 'pickup' && (
               <div className="field">
                 <label className="field__label" htmlFor="address">
-                  Тестовый адрес доставки <span>*</span>
+                  Адрес доставки <span>*</span>
                 </label>
                 <input
                   className="field__input"
@@ -406,9 +404,9 @@ export default function Checkout() {
               <path d="m8 12 3 3 5-6" />
             </svg>
             <p>
-              <strong>Без онлайн-оплаты</strong>
-              <br />В демо проверяется создание и обработка заказа. Банковские данные не
-              запрашиваются.
+              <strong>Проверьте заказ</strong>
+              <br />
+              Убедитесь, что количество товаров и способ получения выбраны верно.
             </p>
           </div>
         </div>
@@ -441,7 +439,7 @@ export default function Checkout() {
             <span data-testid="checkout-total">{formatPrice(total + deliveryFees[delivery])}</span>
           </div>
           <button className="btn btn--primary" type="submit" disabled={pending}>
-            {pending ? 'Сохраняем заказ…' : error ? 'Повторить отправку' : 'Создать демо-заказ'}
+            {pending ? 'Сохраняем заказ…' : error ? 'Повторить отправку' : 'Оформить заказ'}
           </button>
           <p className="workflow-caption" role="status">
             {pending

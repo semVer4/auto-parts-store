@@ -4,7 +4,7 @@ import type { CreateOrderInput, OrderResponse, OrdersResponse } from '../src/sha
 function demoOrder(): CreateOrderInput {
   return {
     requestId: crypto.randomUUID(),
-    customer: { name: 'Демо Пользователь', email: 'demo@example.com', phone: '+7 999 000-00-00' },
+    customer: { name: 'Покупатель Пример', email: 'buyer@example.com', phone: '+7 999 000-00-00' },
     delivery: 'pickup',
     address: '',
     items: [{ productId: 2, quantity: 2 }],
@@ -21,13 +21,16 @@ async function captureAtTop(page: Page, path: string) {
     await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' }))
     await page.waitForFunction(() => window.scrollY === 0)
     await page.evaluate(
-      () => new Promise<void>((resolve) => {
-        requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
-      }),
+      () =>
+        new Promise<void>((resolve) => {
+          requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+        }),
     )
     await page.screenshot({ path, fullPage: true, animations: 'disabled' })
   } finally {
-    await style.evaluate((element) => { element.parentNode?.removeChild(element) })
+    await style.evaluate((element) => {
+      element.parentNode?.removeChild(element)
+    })
   }
 }
 
@@ -125,19 +128,20 @@ test('покупатель проходит каталог → корзину �
   await page.reload()
   await expect(page.getByRole('spinbutton', { name: 'Количество', exact: true })).toHaveValue('2')
   await page.getByRole('link', { name: 'Оформить заказ', exact: true }).click()
-  await page.getByLabel(/^Имя/).fill('Демо Пользователь')
+  await page.getByLabel(/^Имя/).fill('Покупатель Пример')
   await page.getByLabel(/^Телефон/).fill('+7 999 000-00-00')
-  await page.getByLabel(/^E-mail/).fill('demo@example.com')
+  await page.getByLabel(/^E-mail/).fill('buyer@example.com')
   await page.getByRole('radio', { name: /Самовывоз/ }).check()
 
   const responsePromise = page.waitForResponse(
     (response) => response.url().endsWith('/api/orders') && response.request().method() === 'POST',
   )
-  await page.getByRole('button', { name: 'Создать демо-заказ', exact: true }).click()
+  await page.getByRole('button', { name: 'Оформить заказ', exact: true }).click()
   const response = await responsePromise
   expect(response.status()).toBe(201)
   const { order } = (await response.json()) as OrderResponse
   expect(order.total).toBe(960)
+  await expect(page.getByRole('heading', { name: 'Заказ оформлен', exact: true })).toBeVisible()
   await expect(page.getByTestId('order-id')).toContainText(order.id)
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
     await page.evaluate(() => window.innerWidth + 1),
@@ -172,9 +176,9 @@ test('при ошибке сохранения форма и корзина не
     .filter({ has: page.getByRole('heading', { name: 'Фильтр масляный W 712/75', exact: true }) })
   await card.getByRole('button', { name: 'В корзину', exact: true }).click()
   await page.goto('/#/checkout')
-  await page.getByLabel(/^Имя/).fill('Демо Пользователь')
+  await page.getByLabel(/^Имя/).fill('Покупатель Пример')
   await page.getByLabel(/^Телефон/).fill('+7 999 000-00-00')
-  await page.getByLabel(/^E-mail/).fill('demo@example.com')
+  await page.getByLabel(/^E-mail/).fill('buyer@example.com')
   await page.getByRole('radio', { name: /Самовывоз/ }).check()
   await page.route('**/api/orders', async (route) => {
     if (route.request().method() === 'POST') {
@@ -187,9 +191,9 @@ test('при ошибке сохранения форма и корзина не
       await route.continue()
     }
   })
-  await page.getByRole('button', { name: 'Создать демо-заказ', exact: true }).click()
+  await page.getByRole('button', { name: 'Оформить заказ', exact: true }).click()
   await expect(page.getByRole('alert')).toBeVisible()
-  await expect(page.getByLabel(/^E-mail/)).toHaveValue('demo@example.com')
+  await expect(page.getByLabel(/^E-mail/)).toHaveValue('buyer@example.com')
   await page.goto('/#/cart')
   await expect(
     page.getByRole('heading', { name: 'Фильтр масляный W 712/75', exact: true }),

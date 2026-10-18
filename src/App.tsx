@@ -24,7 +24,7 @@ function ScrollToTop() {
       '/cart': 'Корзина',
       '/checkout': 'Оформление заказа',
       '/orders': 'Заказы',
-      '/project': 'О проекте',
+      '/project': 'О сайте',
       '/contacts': 'Помощь',
     }
     const product = pathname.startsWith('/product/')

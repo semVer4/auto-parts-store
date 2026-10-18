@@ -74,7 +74,7 @@ async function prepareJourney(page: Page) {
   expect(response.ok()).toBeTruthy()
   const payload: CreateOrderInput = {
     requestId: crypto.randomUUID(),
-    customer: { name: 'Демо Пользователь', email: 'demo@example.com', phone: '+7 999 000-00-00' },
+    customer: { name: 'Покупатель Пример', email: 'buyer@example.com', phone: '+7 999 000-00-00' },
     delivery: 'pickup',
     address: '',
     items: [{ productId: 2, quantity: 1 }],
@@ -239,9 +239,9 @@ test('leaving checkout before a delayed response does not erase a changed cart',
   })
   try {
     await page.goto('/#/checkout')
-    await page.getByRole('button', { name: 'Заполнить тестовыми данными', exact: true }).click()
+    await page.getByRole('button', { name: 'Заполнить пример', exact: true }).click()
     await page.getByRole('radio', { name: /Самовывоз/ }).check()
-    await page.getByRole('button', { name: 'Создать демо-заказ', exact: true }).click()
+    await page.getByRole('button', { name: 'Оформить заказ', exact: true }).click()
     await requestStarted
     await page.goto('/#/catalog')
     const other = page.getByRole('article').filter({
@@ -338,7 +338,7 @@ test('all routes remain usable at responsive widths and with unavailable fonts',
         )
       if (route.name === 'checkout')
         await expect(
-          page.getByRole('button', { name: 'Создать демо-заказ', exact: true }),
+          page.getByRole('button', { name: 'Оформить заказ', exact: true }),
         ).toBeVisible()
       await noOverflow(page, `${width}px ${route.path}`)
       await imagesLoaded(page)

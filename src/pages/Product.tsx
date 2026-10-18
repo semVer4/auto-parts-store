@@ -72,8 +72,8 @@ export default function Product() {
             />
           </div>
           <figcaption className="product-gallery__caption">
-            <span>Иллюстративное изображение</span>
-            <span>Не является точным фото SKU</span>
+            <span>Изображение товара</span>
+            <span>Внешний вид может отличаться</span>
           </figcaption>
           <div className="product-gallery__thumbs">
             <button
@@ -177,9 +177,9 @@ export default function Product() {
                   Перейти в корзину <span aria-hidden="true">↗</span>
                 </Link>
               ) : product.inStock ? (
-                'Демо-заказ без оплаты. До 20 единиц одного товара.'
+                'До 20 единиц одного товара в заказе.'
               ) : (
-                'Товар недоступен для заказа в демо. Выберите другую деталь.'
+                'Товар недоступен для заказа. Выберите другую деталь.'
               )}
             </div>
           </div>
@@ -200,8 +200,7 @@ export default function Product() {
               </tbody>
             </table>
             <p className="product-specs-note">
-              Демонстрационные характеристики и цены. Перед реальной покупкой нужно отдельно
-              проверить применимость и точный артикул.
+              Перед выбором сверьте совместимость по артикулу и характеристикам.
             </p>
           </div>
         </div>
